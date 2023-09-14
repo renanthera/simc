@@ -5,6 +5,10 @@
 exceptionally limited
 * is init\_special\_effect actually necessary?
 * what even is player\_t::init_scaling()
+* what is the intent behind shared? its not consistent
+* merge proc and rppm?
+* why do cooldowns get initialized in the monk_t constructor, while spells get
+initialized at a later point?
 
 # possibilities
 * keep all cache invalidation in monk\_t::invalidate\_cache

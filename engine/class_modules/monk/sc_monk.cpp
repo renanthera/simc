@@ -3,7 +3,7 @@
 // Send questions to natehieter@gmail.com
 // ==========================================================================
 
-#include "sc_monk.hpp"
+// #include "sc_monk.hpp"
 
 #include "action/action_callback.hpp"
 #include "action/parse_buff_effects.hpp"
@@ -21,7 +21,128 @@ namespace monk
 struct monk_t : public player_t
 {
 public:
-  monk_t( sim_t* sim, std::string_view name, race_e race ) : player_t( sim, MONK, name, race ){};
+  // Augmentations to reported charts and data.
+  struct sample_data_t
+  {
+  } sample_data;
+
+  // Abilities
+  struct ability_t
+  {
+    struct general_t
+    {
+    } general;
+
+    struct brewmaster_t
+    {
+    } brewmaster;
+
+    struct windwalker_t
+    {
+    } windwalker;
+
+    struct mistweaver_t
+    {
+    } mistweaver;
+  } ability;
+
+  // Passives
+  struct passive_t
+  {
+  } passive;
+
+  // Talents
+  struct talent_t
+  {
+    struct general_t
+    {
+    } general;
+
+    struct brewmaster_t
+    {
+    } brewmaster;
+
+    struct windwalker_t
+    {
+    } windwalker;
+
+    struct mistweaver_t
+    {
+    } mistweaver;
+  } talent;
+
+  // Masteries
+  struct mastery_t
+  {
+  } mastery;
+
+  // Would a better name for this be "triggered_actions_t"? "active_action_t" is
+  // somewhat ambiguous.
+  // Actions that are needed to be triggered by other actions.
+  struct active_action_t
+  {
+  } active_action;
+
+  // Player Buffs
+  struct buff_t
+  {
+  } buff;
+
+  // Player Debuffs
+  struct debuff_t
+  {
+  } debuff;
+
+  // Procs
+  struct proc_t
+  {
+  } proc;
+
+  // RPPM Procs
+  struct rppm_t
+  {
+  } rppm;
+
+  // Resource Gains
+  struct gain_t
+  {
+  } gain;
+
+  // Internal Cooldowns
+  struct cooldown_t
+  {
+  } cooldown;
+
+  // Pets
+  // Note: does pet need `this` passed into it?
+  struct pet_t
+  {
+    pet_t( monk_t* p );
+  } pet;
+
+  // Sim Options
+  struct options_t
+  {
+  } sim_options;
+
+  monk_t( sim_t* sim, std::string_view name, race_e race )
+    : player_t( sim, MONK, name, race ),
+      sample_data( sample_data_t() ),
+      ability(),
+      passive(),
+      talent(),
+      mastery(),
+      active_action(),
+      buff(),
+      debuff(),
+      proc(),
+      rppm(),
+      gain(),
+      cooldown(),
+      pet( this ),
+      sim_options()
+  {
+  }
 
   // void merge( player_t& other )
   // {
@@ -59,9 +180,24 @@ public:
   //   }
   // }
 
+  action_t* create_action( std::string_view name, std::string_view options_str )
+  {
+    // TODO: STUB
+    // auto eval = [ name ]( std::string_view compare_name ) { return name == compare_name; };
+
+    // if ( eval("snapshot_stats") ) return new action_t::action_t();
+  }
+
+  void init_spells()
+  {
+    // TODO: STUB
+    player_t::init_spells()
+  }
+
   void init_scaling()
   {
     // TODO: VERIFY SC
+    // Why did only WW get Stamina? All three specs have ToD.
     player_t::init_scaling();
 
     scaling->disable( STAT_STRENGTH );
@@ -109,7 +245,7 @@ public:
     }
   }
 
-  double matching_gear_multiplier( attribute_e attribute ) const
+  double matching_gear_multiplier( attribute_e /*attribute*/ ) const
   {
     // TODO: VERIFY SC
     // TODO: STUB
@@ -158,7 +294,7 @@ public:
   {
     // TODO: INACTIVE
     player_t::copy_from( source );
-    monk_t* source_p = debug_cast<monk_t*>( source );
+    // monk_t* source_p = debug_cast<monk_t*>( source );
 
     // user_options = source_p->user_options;
   }
@@ -167,12 +303,12 @@ public:
   {
     player_t::create_options();
 
-    add_option( opt_int( "monk.initial_chi", user_options.initial_chi, 0, 6 ) );
-    add_option( opt_float( "monk.expel_harm_effectiveness", user_options.expel_harm_effectiveness, 0.0, 1.0 ) );
-    add_option( opt_float( "monk.faeline_stomp_uptime", user_options.faeline_stomp_uptime, 0.0, 1.0 ) );
-    add_option( opt_int( "monk.chi_burst_healing_targets", user_options.chi_burst_healing_targets, 0, 30 ) );
-    add_option( opt_int( "monk.motc_override", user_options.motc_override, 0, 5 ) );
-    add_option( opt_float( "monk.squirm_frequency", user_options.squirm_frequency, 0, 30 ) );
+    // add_option( opt_int( "monk.initial_chi", user_options.initial_chi, 0, 6 ) );
+    // add_option( opt_float( "monk.expel_harm_effectiveness", user_options.expel_harm_effectiveness, 0.0, 1.0 ) );
+    // add_option( opt_float( "monk.faeline_stomp_uptime", user_options.faeline_stomp_uptime, 0.0, 1.0 ) );
+    // add_option( opt_int( "monk.chi_burst_healing_targets", user_options.chi_burst_healing_targets, 0, 30 ) );
+    // add_option( opt_int( "monk.motc_override", user_options.motc_override, 0, 5 ) );
+    // add_option( opt_float( "monk.squirm_frequency", user_options.squirm_frequency, 0, 30 ) );
   }
 
   resource_e primary_resource() const
@@ -278,6 +414,24 @@ public:
   std::string default_temporary_enchant() const
   {
     return monk_apl::temporary_enchant( this );
+  }
+};
+
+struct monk_td_t : public actor_target_data_t
+{
+  struct dot_t
+  {
+  } dot;
+
+  struct debuff_t
+  {
+  } debuff;
+
+  monk_t* player;
+
+  monk_td_t( player_t* target, monk_t* player )
+    : actor_target_data_t( target, player ), dot(), debuff(), player( player )
+  {
   }
 };
 
