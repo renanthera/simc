@@ -37,6 +37,8 @@ of implementation already uses them
 an int and then cause int divison in some future timeline. 1.0 is ur bff
 * don't pollute the monk_t (or any other generic) namespaces. put the code in
 the ability if at all possible (active action, etc)
+* separating blocks prevents clang-format from lining things up consistently, so
+just dont
 
 # labels
 * TODO: VERIFY IG -> verify behaviour, possibly changed from current impl
