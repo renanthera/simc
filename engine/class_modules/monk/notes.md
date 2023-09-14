@@ -12,6 +12,8 @@ initialized at a later point?
 
 # possibilities
 * keep all cache invalidation in monk\_t::invalidate\_cache
+* automate generation of abilities, passives, talents, from some datasource
+to guarantee format
 
 # general shape
 

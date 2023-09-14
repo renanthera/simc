@@ -14,10 +14,8 @@
 namespace monk
 {
 // struct monk_t;
-
-// {
-// private:
-// public:
-//   monk_t( sim_t* sim, std::string_view name, race_e race );
-// }
+// struct monk_td_t;
+// struct monk_action_t;
+// struct monk_report_t;
+// struct monk_module_t;
 }  // namespace monk

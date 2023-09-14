@@ -3,8 +3,6 @@
 // Send questions to natehieter@gmail.com
 // ==========================================================================
 
-// #include "sc_monk.hpp"
-
 #include "action/action_callback.hpp"
 #include "action/parse_buff_effects.hpp"
 #include "class_modules/apl/apl_monk.hpp"
@@ -49,6 +47,21 @@ public:
   // Passives
   struct passive_t
   {
+    struct general_t
+    {
+    } general;
+
+    struct brewmaster_t
+    {
+    } brewmaster;
+
+    struct windwalker_t
+    {
+    } windwalker;
+
+    struct mistweaver_t
+    {
+    } mistweaver;
   } passive;
 
   // Talents
@@ -56,6 +69,30 @@ public:
   {
     struct general_t
     {
+      // Row 1
+      player_talent_t soothing_mist;
+      player_talent_t rising_sun_kick;
+      player_talent_t tigers_lust;
+
+      // Row 2
+      player_talent_t improved_roll;
+      player_talent_t calming_presence;
+      player_talent_t disable;
+
+      // Row 3
+      player_talent_t tiger_tail_sweep;
+      player_talent_t vigorous_expulsion;
+      player_talent_t improved_vivify;
+      player_talent_t detox;           // brewmaster + windwalker
+      player_talent_t improved_detox;  // mistweaver
+
+      // Row 4
+      // Row 5
+      // Row 6
+      // Row 7
+      // Row 8
+      // Row 9
+      // Row 10
     } general;
 
     struct brewmaster_t
@@ -117,7 +154,9 @@ public:
   // Note: does pet need `this` passed into it?
   struct pet_t
   {
-    pet_t( monk_t* p );
+    pet_t( monk_t* /* p */ )
+    {
+    }
   } pet;
 
   // Sim Options
@@ -180,7 +219,7 @@ public:
   //   }
   // }
 
-  action_t* create_action( std::string_view name, std::string_view options_str )
+  action_t* create_action( std::string_view /* name */, std::string_view /* options_str */ )
   {
     // TODO: STUB
     // auto eval = [ name ]( std::string_view compare_name ) { return name == compare_name; };
@@ -191,7 +230,7 @@ public:
   void init_spells()
   {
     // TODO: STUB
-    player_t::init_spells()
+    player_t::init_spells();
   }
 
   void init_scaling()
@@ -210,6 +249,7 @@ public:
     {
       case MONK_BREWMASTER:
         scaling->enable( STAT_BONUS_ARMOR );
+        [[fallthrough]];
       case MONK_WINDWALKER:
         scaling->disable( STAT_INTELLECT );
         scaling->disable( STAT_SPELL_POWER );
@@ -276,10 +316,10 @@ public:
           case MONK_WINDWALKER:
             player_t::invalidate_cache( CACHE_SPELL_POWER );
             break;
-          case MONK_MISTWEAVER:
           default:
             break;
         }
+        break;
       case CACHE_SPELL_POWER:
       case CACHE_INTELLECT:
         if ( specialization() == MONK_MISTWEAVER )
