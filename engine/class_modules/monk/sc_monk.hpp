@@ -317,10 +317,10 @@ struct monk_t : public player_t
   // Would a better name for this be "triggered_actions_t"? "active_action_t" is
   // somewhat ambiguous.
   // Actions that are needed to be triggered by other actions.
-  struct active_action_t
+  struct trigger_action_t
   {
-    propagate_const<blackout_kick_t*> test;
-  } active_action;
+    propagate_const<chi_surge_t*> chi_surge;
+  } action;
 
   // Player Buffs
   struct buff_t
@@ -347,9 +347,10 @@ struct monk_t : public player_t
   {
   } gain;
 
-  // Internal Cooldowns
-  struct cooldown_t
+  // Cooldowns
+  struct cooldowns_t
   {
+    propagate_const<cooldown_t*> weapons_of_order;
   } cooldown;
 
   // Pets
@@ -403,25 +404,6 @@ struct monk_td_t : public actor_target_data_t
   monk_t* player;
 
   monk_td_t( player_t* target, monk_t* player );
-};
-
-template <class Base>
-struct monk_action_t : public Base, public parse_buff_effects_t<monk_td_t>
-{
-  using base_t = monk_action_t<Base>;
-
-  monk_action_t( std::string_view name, monk_t* player, const spell_data_t* spell_data = spell_data_t::nil() );
-
-  void apply_buff_effects();
-  void apply_debuff_effects();
-
-  monk_t* player();
-  const monk_t* player() const;
-};
-
-struct monk_attack_t : public monk_action_t<melee_attack_t>
-{
-  monk_attack_t( std::string_view name, monk_t* player, const spell_data_t* spell = spell_data_t::nil() );
 };
 
 struct monk_report_t : public player_report_extension_t

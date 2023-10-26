@@ -26,7 +26,7 @@ monk_t::monk_t( sim_t* sim, std::string_view name, race_e race )
     passive(),
     talent(),
     mastery(),
-    active_action(),
+    action(),
     buff(),
     debuff(),
     proc(),
@@ -274,16 +274,19 @@ void monk_t::init_spells()
 
   // TODO: talent_t::mistweaver_t initialization
   // TODO: mastery_t initialization
-  // TODO: active_action_t initialization
+  // TODO: trigger_action_t initialization
   {
-    active_action.test = new blackout_kick_t( this, "" );
+    action.chi_surge = new chi_surge_t( this );
   }
   // TODO: buff_t initialization
   // TODO: debuff_t initialization
   // TODO: proc_t initialization
   // TODO: rppm_t initialization
   // TODO: gain_t initialization
-  // TODO: cooldown_t initialization
+  // cooldowns_t initialization
+  {
+    cooldown.weapons_of_order = get_cooldown( "weapons_of_order" );
+  }
   // TODO: pet_t initialization
 }
 
@@ -533,60 +536,6 @@ std::string monk_t::default_temporary_enchant() const
 monk_td_t::monk_td_t( player_t* target, monk_t* player )
   : actor_target_data_t( target, player ), dot(), debuff(), player( player )
 {
-}
-
-template <class Base>
-monk_action_t<Base>::monk_action_t( std::string_view name, monk_t* player,
-                                    const spell_data_t* spell_data /*= spell_data_t::nil()*/ )
-  : Base( name, player, spell_data ), parse_buff_effects_t( this )
-{
-  if ( Base::data().ok() )
-  {
-    apply_buff_effects();
-    apply_debuff_effects();
-  }
-}
-
-template <class Base>
-void monk_action_t<Base>::apply_buff_effects()
-{
-}
-
-template <class Base>
-void monk_action_t<Base>::apply_debuff_effects()
-{
-}
-
-template <class Base>
-monk_t* monk_action_t<Base>::player()
-{
-  return debug_cast<monk_t*>( Base::player );
-}
-
-template <class Base>
-const monk_t* monk_action_t<Base>::player() const
-{
-  return debug_cast<monk_t*>( Base::player );
-}
-
-monk_attack_t::monk_attack_t( std::string_view name, monk_t* player,
-                              const spell_data_t* spell /*= spell_data_t::nil()*/ )
-  : base_t( name, player, spell )
-{
-  special        = true;
-  may_glance     = false;
-  track_cd_waste = true;
-}
-
-action_t* monk_t::create_action( std::string_view name, std::string_view options_str )
-{
-  // Baseline Abilities
-  if ( name == "blackout_kick" )
-    return new blackout_kick_t( this, options_str );
-  if ( name == "auto_attack" )
-    return new auto_attack_t( this, options_str );
-
-  return player_t::create_action( name, options_str );
 }
 
 monk_report_t::bug_t::bug_t( std::string_view description, std::string_view date, bool match )
