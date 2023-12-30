@@ -7062,6 +7062,8 @@ timespan_t player_t::total_reaction_time()
 
 void player_t::stat_gain( stat_e stat, double amount, gain_t* gain, action_t* action, bool temporary_stat )
 {
+  assert( stat != STAT_NONE && stat != STAT_AGI_INT && stat != STAT_STR_AGI && stat != STAT_STR_INT && stat != STAT_STR_AGI_INT );
+
   if ( amount <= 0 )
     return;
 
@@ -7084,10 +7086,10 @@ void player_t::stat_gain( stat_e stat, double amount, gain_t* gain, action_t* ac
     case STAT_STRENGTH:
     case STAT_AGILITY:
     case STAT_INTELLECT:
-    case STAT_AGI_INT:
-    case STAT_STR_AGI:
-    case STAT_STR_INT:
-    case STAT_STR_AGI_INT:
+    // case STAT_AGI_INT:
+    // case STAT_STR_AGI:
+    // case STAT_STR_INT:
+    // case STAT_STR_AGI_INT:
     case STAT_SPIRIT:
     case STAT_SPELL_POWER:
     case STAT_ATTACK_POWER:
@@ -7227,10 +7229,10 @@ void player_t::stat_loss( stat_e stat, double amount, gain_t* gain, action_t* ac
     case STAT_STRENGTH:
     case STAT_AGILITY:
     case STAT_INTELLECT:
-    case STAT_AGI_INT:
-    case STAT_STR_AGI:
-    case STAT_STR_INT:
-    case STAT_STR_AGI_INT:
+    // case STAT_AGI_INT:
+    // case STAT_STR_AGI:
+    // case STAT_STR_INT:
+    // case STAT_STR_AGI_INT:
     case STAT_SPIRIT:
     case STAT_SPELL_POWER:
     case STAT_ATTACK_POWER:

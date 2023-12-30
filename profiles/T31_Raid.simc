@@ -1,5 +1,7 @@
 optimal_raid=1
 default_actions=1
+enable_all_item_effects=1
+iterations=5
 
 T31_Death_Knight_Blood.simc
 T31_Death_Knight_Frost.simc

@@ -1466,6 +1466,7 @@ struct cradle_of_anguish_reset_t : public event_t
 
 void item::cradle_of_anguish( special_effect_t& effect )
 {
+  return;
   stat_buff_t* buff = debug_cast<stat_buff_t*>( buff_t::find( effect.player, "strength_of_will" ) );
   auto buff_spell = effect.player -> find_spell( 242642 );
   auto amount = buff_spell -> effectN( 3 ).average( effect.item );

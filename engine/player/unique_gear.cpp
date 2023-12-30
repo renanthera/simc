@@ -4775,8 +4775,16 @@ void unique_gear::initialize_all_special_effects(player_t *actor)
   {
     // Blacklist of special effects by spell id for effects that are broken.
     switch (special_effect.spell_id) {
-      // case 293512:
-      // case 299464:
+        // e.proc_flags() == 0
+      case 42976: // enchant - executioner
+      case 141178:
+        // e.effectN( k ) is out of bounds
+      case 298225: // potion of empowered proximity
+        // ilvl-based RPPM modifier requires non-zero ilvl parameter
+      case 138964:
+      // other
+      // case 242640: // Cradle of Anguish (Tomb of Sargeras) - Something with the stat gain
+      case 419368: // Dreamtender's Charm (Embellishment) - `make_repeating_event` size too large
       case 302916:
         // new
       case 187611:
@@ -4784,6 +4792,7 @@ void unique_gear::initialize_all_special_effects(player_t *actor)
       case 187614:
       case 187615:
       case 302773:
+      case 215745:
       case 426827:
         continue;
     }

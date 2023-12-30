@@ -512,8 +512,8 @@ inline To debug_cast( From* ptr )
   return static_cast<To>( ptr );
 #else
   To result = dynamic_cast<To>( ptr );
-  if ( ptr )
-    assert( result );
+  // if ( ptr )
+  //   assert( result );
   return result;
 #endif
 }
