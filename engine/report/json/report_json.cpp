@@ -619,7 +619,7 @@ void collected_data_to_json( JsonOutput root, const ::report::json::report_confi
     // Rest of the resource summaries are printed only based on relevant resources
     range::for_each( relevant_resources, [ &root, &cd ]( resource_e r ) {
       root[ "resource_lost" ][ util::resource_type_string( r ) ] = cd.resource_lost[ r ];
-      
+
       root[ "resource_overflowed" ][ util::resource_type_string( r ) ] = cd.resource_overflowed[ r ];
 
       if ( r < cd.combat_end_resource.size() )
@@ -877,25 +877,25 @@ void to_json( JsonOutput& arr, const ::report::json::report_configuration_t& rep
 
 void to_json( JsonOutput& arr, const raid_event_t& event )
 {
-  auto root = arr.add();
-  root[ "name" ] = event.name;
-  root[ "type" ] = event.type;
-  add_non_zero( root, "first", event.first );
-  add_non_zero( root, "last", event.last );
-  add_non_zero( root, "cooldown", event.cooldown );
-  add_non_zero( root, "cooldown_stddev", event.cooldown_stddev );
-  add_non_zero( root, "cooldown_min", event.cooldown_min );
-  add_non_zero( root, "cooldown_max", event.cooldown_max );
-  add_non_zero( root, "duration", event.duration );
-  add_non_zero( root, "duration_stddev", event.duration_stddev );
-  add_non_zero( root, "duration_min", event.duration_min );
-  add_non_zero( root, "duration_max", event.duration_max );
-  add_non_zero( root, "distance_min", event.distance_min );
-  add_non_zero( root, "distance_max", event.distance_max );
-  add_non_zero( root, "players_only", event.players_only );
-  add_non_default( root, "player_chance", event.player_chance, 1.0 );
-  add_non_default( root, "affected_role", event.affected_role, ROLE_NONE );
-  add_non_zero( root, "saved_duration", event.saved_duration );
+  // auto root = arr.add();
+  // root[ "name" ] = event.name;
+  // root[ "type" ] = event.type;
+  // add_non_zero( root, "first", event.first );
+  // add_non_zero( root, "last", event.last );
+  // add_non_zero( root, "cooldown", event.cooldown );
+  // add_non_zero( root, "cooldown_stddev", event.cooldown_stddev );
+  // add_non_zero( root, "cooldown_min", event.cooldown_min );
+  // add_non_zero( root, "cooldown_max", event.cooldown_max );
+  // add_non_zero( root, "duration", event.duration );
+  // add_non_zero( root, "duration_stddev", event.duration_stddev );
+  // add_non_zero( root, "duration_min", event.duration_min );
+  // add_non_zero( root, "duration_max", event.duration_max );
+  // add_non_zero( root, "distance_min", event.distance_min );
+  // add_non_zero( root, "distance_max", event.distance_max );
+  // add_non_zero( root, "players_only", event.players_only );
+  // add_non_default( root, "player_chance", event.player_chance, 1.0 );
+  // add_non_default( root, "affected_role", event.affected_role, ROLE_NONE );
+  // add_non_zero( root, "saved_duration", event.saved_duration );
 }
 
 void iteration_data_to_json( JsonOutput root, const std::vector<iteration_data_entry_t>& entries )
@@ -1044,16 +1044,16 @@ void profileset_json3( const profileset::profilesets_t& profilesets, const sim_t
   auto results = root[ "results" ].make_array();
 
   range::for_each( profilesets.profilesets(), [ &results, &sim ]( const profileset::profilesets_t::profileset_entry_t& profileset ) {
-    
+
     auto&& obj = results.add();
     obj[ "name" ] = profileset -> name();
     auto results_obj = obj[ "metrics" ].make_array();
-    
+
     for ( size_t midx = 0; midx < sim.profileset_metric.size(); ++midx )
     {
       const auto& result = profileset -> result( sim.profileset_metric[ midx ] );
 
-      
+
       auto&& obj = results_obj.add();
 
       obj[ "metric" ] = util::scale_metric_type_string( sim.profileset_metric[ midx ] );
@@ -1073,7 +1073,7 @@ void profileset_json3( const profileset::profilesets_t& profilesets, const sim_t
 
       obj[ "iterations" ] = as<uint64_t>( result.iterations() );
     }
-    
+
     // Optional override ouput data
     if ( ! sim.profileset_output_data.empty() ) {
       const auto& output_data = profileset -> output_data();
@@ -1338,7 +1338,7 @@ void print_json_pretty( FILE* o, const sim_t& sim, const ::report::json::report_
   {
     normal_print(b, doc, report_configuration);
   }
-  
+
 }
 
 void print_json_report( sim_t& sim, const ::report::json::report_configuration_t& report_configuration)

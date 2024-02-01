@@ -24,43 +24,69 @@
 struct event_t;
 struct expr_t;
 struct option_t;
-struct player_t;
+// struct player_t;
 struct sim_t;
+
+template <typename T>
+struct interval_t
+{
+  T min;
+  T max;
+  T mean;
+  T stddev;
+  interval_t();
+  void sc_format_to( const interval_t& interval, fmt::format_context::iterator out );
+};
+
+enum actor_filter_e
+{
+  AF_NONE       = 1 << 0,
+  AF_ACTOR_TYPE = 1 << 1,  // player_e enemy, player, (player) pet
+  AF_ROLE       = 1 << 2,  // role_e dps, tank, heal
+  AF_EXPRN      = 1 << 3,  // expr_t expression
+  AF_MAX        = 1 << 4,
+};
+
+struct actor_filter_t
+{
+  std::string input;
+  actor_filter_e filter_type;
+  union
+  {
+    player_e actor;
+    role_e role;
+  } filter;
+  actor_filter_t();
+  void sc_format_to( const actor_filter_t& actor_filter, fmt::format_context::iterator out );
+};
 
 struct raid_event_t : private noncopyable
 {
 public:
   sim_t* sim;
-  std::string name;
   std::string type;
   int64_t num_starts;
-  timespan_t first, last;
-  double first_pct, last_pct;
-  timespan_t cooldown;
-  timespan_t cooldown_stddev;
-  timespan_t cooldown_min;
-  timespan_t cooldown_max;
-  timespan_t duration;
-  timespan_t duration_stddev;
-  timespan_t duration_min;
-  timespan_t duration_max;
-  int pull;
-  std::string pull_target_str;
-
-  // Player filter options
-  double distance_min;   // Minimal player distance
-  double distance_max;   // Maximal player distance
-  bool players_only;     // Don't affect pets
-  bool force_stop;       // Stop immediately at last/last_pct
-  double player_chance;  // Chance for individual player to be affected by raid event
-
-  std::string affected_role_str;
-  role_e affected_role;
-  std::string player_if_expr_str;
-
   timespan_t saved_duration;
-  std::vector<player_t*> affected_players;
   std::unordered_map<size_t, std::unique_ptr<expr_t>> player_expressions;
+
+  struct options_t
+  {
+    std::string name;
+    interval_t<timespan_t> time_trigger;
+    interval_t<double> percent_trigger;
+    interval_t<timespan_t> cooldown;
+    interval_t<timespan_t> duration;
+    std::vector<actor_filter_t> target_filters;
+    std::vector<actor_filter_t> source_filters;
+    std::vector<player_t*> target_actors;
+    std::vector<player_t*> source_actors;
+    bool stop; // stop immediately at any `last` trigger
+    double execute_chance;  // Chance for individual targets to be affected by raid event
+    // interval_t<double> distance;
+    // int pull_index;
+    options_t();
+    void sc_format_to( const options_t& options, fmt::format_context::iterator out );
+  } option;
   std::vector<std::unique_ptr<option_t>> options;
 
   raid_event_t( sim_t*, util::string_view type );
@@ -79,18 +105,18 @@ public:
   timespan_t until_next() const;
   virtual timespan_t remains() const;
   bool up() const;
-  double distance()
-  {
-    return distance_max;
-  }
-  double max_distance()
-  {
-    return distance_min;
-  }
-  double min_distance()
-  {
-    return distance_max;
-  }
+  // double distance()
+  // {
+  //   return distance_max;
+  // }
+  // double max_distance()
+  // {
+  //   return distance_min;
+  // }
+  // double min_distance()
+  // {
+  //   return distance_max;
+  // }
   void schedule();
   void deactivate( util::string_view reason );
   virtual void reset();

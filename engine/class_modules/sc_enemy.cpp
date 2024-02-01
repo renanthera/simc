@@ -1504,19 +1504,19 @@ void enemy_t::add_tank_heal_raid_event( tank_dummy_e tank_dummy )
   std::string::size_type cut_pt = heal_raid_event.find_first_of( ',' );
   auto heal_options             = heal_raid_event.substr( cut_pt + 1 );
   auto heal_name                = heal_raid_event.substr( 0, cut_pt );
-  auto raid_event               = raid_event_t::create( sim, heal_name, heal_options );
+  // auto raid_event               = raid_event_t::create( sim, heal_name, heal_options );
 
-  if ( raid_event->cooldown <= timespan_t::zero() )
-  {
-    throw std::invalid_argument( "Cooldown not set or negative." );
-  }
-  if ( raid_event->cooldown <= raid_event->cooldown_stddev )
-  {
-    throw std::invalid_argument( "Cooldown lower than cooldown standard deviation." );
-  }
+  // if ( raid_event->cooldown <= timespan_t::zero() )
+  // {
+  //   throw std::invalid_argument( "Cooldown not set or negative." );
+  // }
+  // if ( raid_event->cooldown <= raid_event->cooldown_stddev )
+  // {
+  //   throw std::invalid_argument( "Cooldown lower than cooldown standard deviation." );
+  // }
 
-  sim->print_debug( "Successfully created '{}'.", *( raid_event.get() ) );
-  sim->raid_events.push_back( std::move( raid_event ) );
+  // sim->print_debug( "Successfully created '{}'.", *( raid_event.get() ) );
+  // sim->raid_events.push_back( std::move( raid_event ) );
 }
 
 void enemy_t::init_action_list()
