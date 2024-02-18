@@ -23,6 +23,11 @@
 
 #include <locale>
 
+#include "util/rng.hpp"
+#include "util/timespan.hpp"
+#include <iostream>
+#include <random>
+
 #ifdef SC_SIGACTION
 #include <csignal>
 #include <utility>
@@ -389,10 +394,107 @@ int sim_t::main( const std::vector<std::string>& args )
 
 int main( int argc, char** argv )
 {
-  std::locale::global( std::locale( "C" ) );
+  std::random_device rd;
+  rng::basic_rng_t<rng::xoshiro256plus_t> rng{};
+  uint count = 50000;
 
-  sim_t sim;
-  sim_signal_handler_t::global_sim = &sim;
+  rng.seed( 123456789 );
 
-  return sim.main( io::utf8_args( argc, argv ) );
+  double roll_d = 0.5;
+
+  double min_d = 0.0;
+  int min_i = 0;
+  uint min_u = 0;
+  timespan_t min_t = 0_s;
+
+  double max_d = 2.0;
+  int max_i = 2;
+  uint max_u = 2;
+  timespan_t max_t = 2_s;
+
+  double mean_d = 0.0;
+  uint mean_u = 0;
+  timespan_t mean_t = 0_s;
+
+  double stddev_d = 1.0;
+  uint stddev_u = 1;
+  timespan_t stddev_t = 1_s;
+
+  std::cout << "double real()" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.real() << std::endl;
+
+  std::cout << "bool roll()" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.roll( roll_d ) << std::endl;
+
+  std::cout << "double range(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(min_d, max_d) << std::endl;
+
+  std::cout << "double range(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(max_d) << std::endl;
+
+  std::cout << "T range(...); T=int" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(min_i, max_i) << std::endl;
+
+  std::cout << "T range(...); T=uint" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(min_u, max_u) << std::endl;
+
+  std::cout << "timespan_t range(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(min_t, max_t).total_millis() << std::endl;
+
+  std::cout << "double gauss(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.gauss(mean_d, stddev_d) << std::endl;
+
+  std::cout << "double gauss_ab(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.gauss_ab(mean_d, stddev_d, min_d, max_d) << std::endl;
+
+  std::cout << "double gauss_a(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.gauss_a(mean_d, stddev_d, min_d) << std::endl;
+
+  std::cout << "double gauss_b(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.gauss_b(mean_d, stddev_d, max_d) << std::endl;
+
+  std::cout << "T gauss(...); T=uint" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.gauss(mean_u, stddev_u) << std::endl;
+
+  std::cout << "timespan_t gauss(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.gauss(mean_t, stddev_t).total_millis() << std::endl;
+
+  std::cout << "double exponential(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.exponential(stddev_d) << std::endl;
+
+  std::cout << "timespan_t exponential(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.exponential(stddev_t).total_millis() << std::endl;
+
+  std::cout << "double exgauss(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.exgauss(mean_d, stddev_d, stddev_d) << std::endl;
+
+  std::cout << "T exgauss(...); T=uint" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.exgauss(mean_u, stddev_u, stddev_u) << std::endl;
+
+  std::cout << "timespan_t exgauss(...)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.exgauss(mean_t, stddev_t, stddev_t).total_millis() << std::endl;
+  // std::locale::global();
+
+  // sim_t sim;
+  // sim_signal_handler_t::global_sim = &sim;
+
+  // return sim.main( io::utf8_args( argc, argv ) );
 }
