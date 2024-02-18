@@ -428,25 +428,33 @@ int main( int argc, char** argv )
   for (uint i = 0; i < count; i++)
     std::cout << rng.roll( roll_d ) << std::endl;
 
-  std::cout << "double range(...)" << std::endl;
+  std::cout << "double range(double min, double max)" << std::endl;
   for (uint i = 0; i < count; i++)
     std::cout << rng.range(min_d, max_d) << std::endl;
 
-  std::cout << "double range(...)" << std::endl;
-  for (uint i = 0; i < count; i++)
-    std::cout << rng.range(max_d) << std::endl;
-
-  std::cout << "T range(...); T=int" << std::endl;
+  std::cout << "T range(T min, T max); T=int" << std::endl;
   for (uint i = 0; i < count; i++)
     std::cout << rng.range(min_i, max_i) << std::endl;
 
-  std::cout << "T range(...); T=uint" << std::endl;
+  std::cout << "T range(T min, T max); T=uint" << std::endl;
   for (uint i = 0; i < count; i++)
     std::cout << rng.range(min_u, max_u) << std::endl;
 
-  std::cout << "timespan_t range(...)" << std::endl;
+  std::cout << "timespan_t range(min, max)" << std::endl;
   for (uint i = 0; i < count; i++)
     std::cout << rng.range(min_t, max_t).total_millis() << std::endl;
+
+  std::cout << "double range(double max)" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(max_d) << std::endl;
+
+  std::cout << "T range(T max); T=int" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(max_i) << std::endl;
+
+  std::cout << "T range(T max); T=uint" << std::endl;
+  for (uint i = 0; i < count; i++)
+    std::cout << rng.range(max_u) << std::endl;
 
   std::cout << "double gauss(...)" << std::endl;
   for (uint i = 0; i < count; i++)
