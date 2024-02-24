@@ -14,51 +14,164 @@
 #include "util/format.hpp"
 #include "util/io.hpp"
 #include "report/report_helper.hpp"
+#include "util/util.hpp"
 
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
+#include <regex>
 
 struct event_t;
 struct expr_t;
 struct option_t;
-// struct player_t;
+struct player_t;
 struct sim_t;
 
 template <typename T>
 struct interval_t
 {
-  T min;
-  T max;
+  // Previous behaviour:
+  // - values are normally distributed (ish)
+  // - mean is centrally located between max and min
+  // - all possible values are contained within [ mean - 6 * stddev, mean + 6 * stddev]
+
+  // if not provided, min = mean * 0.5
+  // if not provided, max = mean * 1.5
+  // if not provided, stddev = 0
+  // if not provided, mean = 0
+
+  // some values are considered not initializable:
+  // - ( mean - 6 * stddev <= 0 ) @ adds_raid_event_t::adds_raid_event_t()
+  // - ( mean - stddev <= 0 ) @ raid_event_t::init(...)
+  // - ( mean <= 0 ) @ raid_event_t::init(...)
+
+  // New behaviour:
+  // - if value is defined, use value
+  // - mean: mandatory
+  // - stddev: gauss, otherwise uniform
+  // - min: -> gauss_b or gauss
+  // - max: -> gauss_a or gauss
+  sim_t* sim;
   T mean;
   T stddev;
-  interval_t();
-  void sc_format_to( const interval_t& interval, fmt::format_context::iterator out );
-};
+  T min;
+  T max;
+  interval_t( sim_t* sim, T mean, T stddev, T min, T max )
+    : sim( sim ),
+      mean( mean ),
+      stddev( stddev ),
+      min( min ),
+      max( max )
+  {
+    // if ( max < min && max != 0.0 )
+    //   throw std::invalid_argument( fmt::format( "Invalid arguments: Max ({}) less than Min ({})", max, min ) );
+    // if ( mean < min && mean != -1 )
+    //   throw std::invalid_argument( fmt::format( "Invalid arguments: Mean ({}) less than Min ({})", mean, min ) );
+    // if ( mean > max && max != -1 )
+    //   throw std::invalid_argument( fmt::format( "Invalid arguments: Mean ({}) greater than than Max ({})", mean, max ) );
+    // if ( min < stddev * 6 )
+    //   throw std::invalid_argument( fmt::format( "Invalid arguments: Stddev ({}) too large.", stddev ) );
+  }
 
-enum actor_filter_e
-{
-  AF_NONE       = 1 << 0,
-  AF_ACTOR_TYPE = 1 << 1,  // player_e enemy, player, (player) pet
-  AF_ROLE       = 1 << 2,  // role_e dps, tank, heal
-  AF_EXPRN      = 1 << 3,  // expr_t expression
-  AF_MAX        = 1 << 4,
+  T value()
+  {
+    if ( stddev && min && max )
+      return sim->rng().gauss_ab( mean, stddev, min, max );
+    if ( stddev && min )
+      return sim->rng().gauss_a( mean, stddev, min );
+    if ( stddev && max )
+      return sim->rng().gauss_b( mean, stddev, max );
+    if ( stddev )
+      return sim->rng().gauss( mean, stddev );
+    return sim->rng().range( min, max );
+  }
 };
 
 struct actor_filter_t
 {
-  std::string input;
-  actor_filter_e filter_type;
-  union
+  std::string filter_input;
+  std::string filter_type;
+  actor_filter_t( std::string filter_input, std::string filter_type )
+    : filter_input( filter_input ),
+      filter_type( filter_type )
+  {};
+
+  virtual bool filter_actor( player_t* p );
+
+  void apply_filter( std::vector<player_t*>& actor_list )
   {
-    player_e actor;
-    role_e role;
-  } filter;
-  actor_filter_t();
-  void sc_format_to( const actor_filter_t& actor_filter, fmt::format_context::iterator out );
+    actor_list.erase( std::remove_if( actor_list.begin(), actor_list.end(),
+                                       [ this ]( player_t* p ) { return filter_actor( p ); } ) );
+  }
+
+  void sc_format_to( const actor_filter_t& actor_filter, fmt::format_context::iterator out )
+  {
+    fmt::format_to( out, "Filters {}: {}", actor_filter.filter_type, actor_filter.filter_input );
+  }
 };
+
+struct af_actor_type_t : actor_filter_t
+{
+  player_e filter;
+
+  af_actor_type_t( std::string filter_input )
+    : actor_filter_t( filter_input, "actor type" ),
+      filter( util::parse_player_type( filter_input ) )
+  {};
+
+  bool filter_actor( player_t* p )
+  {
+    return p->type == filter;
+  }
+};
+
+struct af_role_type_t : actor_filter_t
+{
+  role_e filter;
+
+  af_role_type_t( std::string filter_input )
+    : actor_filter_t( filter_input, "actor role" ),
+      filter( util::parse_role_type( filter_input ) )
+  {};
+
+  bool filter_actor( player_t* p )
+  {
+    return p->primary_role() == filter;
+  }
+};
+
+struct af_name_string_t : actor_filter_t
+{
+  af_name_string_t( std::string filter_input )
+    : actor_filter_t( filter_input, "actor name (string)" )
+  {};
+
+  bool filter_actor( player_t* p )
+  {
+    return p->name() == filter_input;
+  }
+};
+
+struct af_name_regex_t : actor_filter_t
+{
+  std::regex filter;
+
+  af_name_regex_t( std::string filter_input )
+    : actor_filter_t( filter_input, "actor name (regex)" ),
+      filter( filter_input )
+  {};
+
+  bool filter_actor( player_t* p )
+  {
+    return std::regex_search( p->name(), filter );
+  }
+};
+
+// struct af_expression_t : actor_filter_t
+// {};
 
 struct raid_event_t : private noncopyable
 {
