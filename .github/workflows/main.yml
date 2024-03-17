@@ -116,7 +116,7 @@ jobs:
         run: cmake -H. -B'${{ runner.workspace }}/b/ninja' -GNinja -DBUILD_GUI=OFF
               -DCMAKE_BUILD_TYPE=Debug
               -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
-              -DCMAKE_CXX_FLAGS="-Og ${{ matrix.enable_file_prefix_map && format('-ffile-prefix-map={0}/=/', runner.workspace) || ''}})
+              -DCMAKE_CXX_FLAGS="-Og ${{ matrix.enable_file_prefix_map && format('-ffile-prefix-map={0}/=/', runner.workspace) || '') }}
                 -fno-omit-frame-pointer -fsanitize=address,undefined"
               -DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld -fsanitize=address,undefined"
               -DCMAKE_CXX_STANDARD=${{ matrix.cppVersion }}
