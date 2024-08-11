@@ -1249,12 +1249,8 @@ struct flurry_strike_t : public monk_melee_attack_t
 
     p()->buff.against_all_odds->trigger();
 
-    if ( p()->talent.shado_pan.high_impact.ok() )
-    {
-      auto td = p()->get_target_data( s->target );
-      if ( td )
-        td->debuff.high_impact->trigger();
-    }
+    if ( auto target_data = p()->get_target_data( s->target ); target_data )
+      target_data->debuff.high_impact->trigger();
 
     if ( p()->buff.wisdom_of_the_wall_flurry->up() )
     {
@@ -1271,22 +1267,20 @@ struct flurry_strikes_t : public monk_melee_attack_t
 
   flurry_strikes_t( monk_t *p ) : monk_melee_attack_t( p, "flurry_strikes", p->talent.shado_pan.flurry_strikes )
   {
-    strike      = new flurry_strike_t( p );
-    high_impact = new high_impact_t( p );
-
+    strike = new flurry_strike_t( p );
     add_child( strike );
-    add_child( high_impact );
 
-    p->register_on_kill_callback( [ this, p ]( player_t *t ) {
+    if ( !p->talent.shado_pan.high_impact->ok() )
+      return;
+
+    high_impact = new high_impact_t( p );
+    add_child( high_impact );
+    p->register_on_kill_callback( [ this, p ]( player_t *target ) {
       if ( p->sim->event_mgr.canceled )
         return;
 
-      auto td = p->get_target_data( t );
-      if ( td && td->debuff.high_impact->remains() >= 0_ms )
-      {
-        high_impact->set_target( t );
-        high_impact->execute();
-      }
+      if ( auto target_data = p->get_target_data( target ); target_data && target_data->debuff.high_impact->up() )
+        high_impact->execute_on_target( target );
     } );
   }
 
@@ -6694,7 +6688,8 @@ monk_td_t::monk_td_t( player_t *target, monk_t *p ) : actor_target_data_t( targe
 
   // Shado-Pan
 
-  debuff.high_impact = make_buff( *this, "high_impact", p->talent.shado_pan.high_impact_debuff )
+  debuff.high_impact = make_buff_fallback( p->talent.shado_pan.high_impact->ok(), *this, "high_impact",
+                                           p->talent.shado_pan.high_impact_debuff )
                            ->set_trigger_spell( p->talent.shado_pan.high_impact )
                            ->set_quiet( true );
 
