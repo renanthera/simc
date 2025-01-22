@@ -5979,10 +5979,6 @@ void do_trinket_init( monk_t *player, specialization_e spec, const special_effec
   // Set pointer, module considers non-null pointer to mean the effect is "enabled"
   ptr = &( effect );
 }
-
-void init()
-{
-}
 }  // namespace items
 
 }  // end namespace monk
@@ -9287,11 +9283,6 @@ struct monk_module_t : public module_t
   bool valid() const override
   {
     return true;
-  }
-
-  void static_init() const override
-  {
-    items::init();
   }
 
   void register_hotfixes() const override
