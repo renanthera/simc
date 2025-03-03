@@ -279,116 +279,19 @@ void mistweaver( player_t *p )
 
 void windwalker_live( player_t *p )
 {
-  auto monk = debug_cast<monk::monk_t *>( p );
+  action_priority_list_t *pre            = p->get_action_priority_list( "precombat" );
+  action_priority_list_t *def            = p->get_action_priority_list( "default" );
+  action_priority_list_t *trinkets       = p->get_action_priority_list( "trinkets" );
+  action_priority_list_t *aoe_opener     = p->get_action_priority_list( "aoe_opener" );
+  action_priority_list_t *normal_opener  = p->get_action_priority_list( "normal_opener" );
+  action_priority_list_t *cooldowns      = p->get_action_priority_list( "cooldowns" );
+  action_priority_list_t *default_aoe    = p->get_action_priority_list( "default_aoe" );
+  action_priority_list_t *default_cleave = p->get_action_priority_list( "default_cleave" );
+  action_priority_list_t *default_st     = p->get_action_priority_list( "default_st" );
+  action_priority_list_t *fallback       = p->get_action_priority_list( "fallback" );
 
-  //============================================================================
-  // On-use Items
-  //============================================================================
-  auto _WW_ON_USE = []( const item_t &item ) {
-    //-------------------------------------------
-    // SEF item map
-    //-------------------------------------------
-    const static std::unordered_map<std::string, std::string> sef_trinkets{
-        // name_str -> APL
-        // DF Trinkets
-        { "algethar_puzzle_box",
-          ",if=(pet.xuen_the_white_tiger.active|!talent.invoke_xuen_the_white_tiger)&!buff.storm_earth_"
-          "and_fire.up|fight_remains<25" },
-        { "erupting_spear_fragment", ",if=buff.storm_earth_and_fire.up" },
-        { "manic_grieftorch",
-          ",if=!trinket.1.has_use_buff&!trinket.2.has_use_buff&!buff.storm_earth_and_fire.up&!pet.xuen_"
-          "the_white_tiger.active|(trinket.1.has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger."
-          "remains>30|fight_remains<5" },
-        { "beacon_to_the_beyond",
-          ",if=!trinket.1.has_use_buff&!trinket.2.has_use_buff&!buff.storm_earth_and_fire.up&!pet.xuen_"
-          "the_white_tiger.active|(trinket.1.has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger."
-          "remains>30|fight_remains<10" },
-        { "djaruun_pillar_of_the_elder_flame",
-          ",if=cooldown.fists_of_fury.remains<2&cooldown.invoke_xuen_the_white_tiger.remains>10|fight_remains<12" },
-        { "dragonfire_bomb_dispenser",
-          ",if=!trinket.1.has_use_buff&!trinket.2.has_use_buff|(trinket.1.has_use_buff|trinket.2.has_use_buff)&"
-          "cooldown.invoke_xuen_the_white_tiger.remains>10|fight_remains<10" },
-        // TWW Trinkets
-        { "imperfect_ascendancy_serum", ",use_off_gcd=1,if=pet.xuen_the_white_tiger.active" },
-        { "mad_queens_mandate",
-          ",target_if=min:time_to_die,if=!trinket.1.has_use_buff&!trinket.2.has_use_buff|(trinket.1.has_use_buff|"
-          "trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger.remains>30" },
-        { "treacherous_transmitter",
-          ",if=!fight_style.dungeonslice&(cooldown.invoke_xuen_the_white_tiger.remains<4|talent.xuens_bond&pet.xuen_"
-          "the_white_tiger.active)|fight_style.dungeonslice&((fight_style.DungeonSlice&active_enemies=1&(time<10|"
-          "talent.xuens_bond&talent.celestial_conduit)|!fight_style.dungeonslice|active_enemies>1)&cooldown.storm_"
-          "earth_and_fire.ready&(target.time_to_die>14&!fight_style.dungeonroute|target.time_to_die>22)&(active_"
-          "enemies>2|debuff.acclamation.up|!talent.ordered_elements&time<5)&(chi>2&talent.ordered_elements|chi>5|chi>3&"
-          "energy<50|energy<50&active_enemies=1|prev.tiger_palm&!talent.ordered_elements&time<5)|fight_remains<30)|"
-          "buff.invokers_delight.up" },
-
-        // Defaults:
-        { "ITEM_STAT_BUFF", ",if=pet.xuen_the_white_tiger.active" },
-        { "ITEM_DMG_BUFF",
-          ",if=!trinket.1.has_use_buff&!trinket.2.has_use_buff|(trinket.1.has_use_buff|trinket.2.has_use_buff)&"
-          "cooldown.invoke_xuen_the_white_tiger.remains>30" },
-    };
-
-    // -----------------------------------------
-
-    std::string concat = "";
-    auto talent_map    = sef_trinkets;
-    try
-    {
-      concat = talent_map.at( item.name_str );
-    }
-    catch ( ... )
-    {
-      int duration = 0;
-
-      for ( auto e : item.parsed.special_effects )
-      {
-        duration = (int)floor( e->duration().total_seconds() );
-
-        // Ignore items that have a 30 second or shorter cooldown (or no cooldown)
-        // Unless defined in the map above these will be used on cooldown.
-        if ( e->type == SPECIAL_EFFECT_USE && e->cooldown() > timespan_t::from_seconds( 30 ) )
-        {
-          if ( e->is_stat_buff() || e->buff_type() == SPECIAL_EFFECT_BUFF_STAT )
-          {
-            // This item grants a stat buff on use
-            concat = talent_map.at( "ITEM_STAT_BUFF" );
-
-            break;
-          }
-          else
-            // This item has a generic damage effect
-            concat = talent_map.at( "ITEM_DMG_BUFF" );
-        }
-      }
-
-      if ( concat.length() > 0 && duration > 0 )
-        concat = concat + "|fight_remains<" + std::to_string( duration );
-    }
-
-    return concat;
-  };
-
-  //============================================================================
-
-  action_priority_list_t *pre = p->get_action_priority_list( "precombat" );
-
-  // Snapshot stats
   pre->add_action( "snapshot_stats", "Snapshot raid buffed stats before combat begins and pre-potting is done." );
-
-  // Add Precombattrinkets
   pre->add_action( "use_item,name=imperfect_ascendancy_serum" );
-
-  std::vector<std::string> racial_actions = p->get_racial_actions();
-  action_priority_list_t *def             = p->get_action_priority_list( "default" );
-  action_priority_list_t *trinkets        = p->get_action_priority_list( "trinkets" );
-  action_priority_list_t *aoe_opener      = p->get_action_priority_list( "aoe_opener" );
-  action_priority_list_t *normal_opener   = p->get_action_priority_list( "normal_opener" );
-  action_priority_list_t *cooldowns       = p->get_action_priority_list( "cooldowns" );
-  action_priority_list_t *default_aoe     = p->get_action_priority_list( "default_aoe" );
-  action_priority_list_t *default_cleave  = p->get_action_priority_list( "default_cleave" );
-  action_priority_list_t *default_st      = p->get_action_priority_list( "default_st" );
-  action_priority_list_t *fallback        = p->get_action_priority_list( "fallback" );
 
   def->add_action( "auto_attack" );
   def->add_action( "roll,if=movement.distance>5", "Move to target" );
@@ -396,15 +299,11 @@ void windwalker_live( player_t *p )
   def->add_action( "flying_serpent_kick,if=movement.distance>5" );
   def->add_action( "spear_hand_strike,if=target.debuff.casting.react" );
 
-  // Potion
-  if ( p->sim->allow_potions )
-  {
-    if ( monk->talent.windwalker.invoke_xuen_the_white_tiger->ok() )
-      def->add_action( "potion,if=buff.storm_earth_and_fire.up&pet.xuen_the_white_tiger.active|fight_remains<=30",
-                       "Potion" );
-    else
-      def->add_action( "potion,if=buff.storm_earth_and_fire.up|fight_remains<=30", "Potion" );
-  }
+  def->add_action(
+      "potion,if=talent.invoke_xuen_the_white_tiger&pet.xuen_the_white_tiger.active&buff.storm_earth_and_fire.up",
+      "Potion" );
+  def->add_action( "potion,if=buff.storm_earth_and_fire.up" );
+  def->add_action( "potion,if=fight_remains<=30" );
 
   // Enable PI if available
   def->add_action( "variable,name=has_external_pi,value=cooldown.invoke_power_infusion_0.duration>0",
@@ -483,18 +382,72 @@ void windwalker_live( player_t *p )
   def->add_action( "lights_judgment,if=buff.storm_earth_and_fire.down" );
   def->add_action( "haymaker,if=buff.storm_earth_and_fire.down" );
   def->add_action( "rocket_barrage,if=buff.storm_earth_and_fire.down" );
-  // earthen racial not implemented yet
-  // def->add_action( "azerite_surge,if=buff.storm_earth_and_fire.down" );
+  // def->add_action( "azerite_surge,if=buff.storm_earth_and_fire.down" ); NYI
   def->add_action( "arcane_pulse,if=buff.storm_earth_and_fire.down" );
 
   // Trinkets
-  for ( const auto &item : p->items )
-  {
-    if ( item.has_special_effect( SPECIAL_EFFECT_SOURCE_ITEM, SPECIAL_EFFECT_USE ) )
-      trinkets->add_action( "use_item,name=" + item.name_str + _WW_ON_USE( item ) );
-  }
-
+  trinkets->add_action( "", "Dragonflight Trinkets" );
+  trinkets->add_action(
+      "use_item,name=algethar_puzzle_box,if=(pet.xuen_the_white_tiger.active|!talent.invoke_xuen_the_white_tiger)&!"
+      "buff.storm_earth_and_fire.up|fight_remains<25",
+      "Algethar Puzzle Box" );
+  trinkets->add_action( "use_item,name=erupting_spear_fragment,if=buff.storm_earth_and_fire.up",
+                        "Erupting Spear Fragment" );
+  trinkets->add_action(
+      "use_item,name=manic_grieftorch,if=!trinket.1.has_use_buff&!trinket.2.has_use_buff&!buff.storm_earth_and_fire.up&"
+      "!pet.xuen_the_white_tiger.active|(trinket.1.has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_"
+      "tiger.remains>30|fight_remains<5",
+      "Manic Grieftorch" );
+  trinkets->add_action(
+      "use_item,name=beacon_to_the_beyond,if=!trinket.1.has_use_buff&!trinket.2.has_use_buff&!buff.storm_earth_and_"
+      "fire.up&!pet.xuen_the_white_tiger.active|(trinket.1.has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_"
+      "the_white_tiger.remains>30|fight_remains<10",
+      "Beacon to the Beyond" );
+  trinkets->add_action(
+      "use_item,name=djaruun_pillar_of_the_elder_flame,if=cooldown.fists_of_fury.remains<2&cooldown.invoke_xuen_the_"
+      "white_tiger.remains>10|fight_remains<12",
+      "Djaruun, Pillar of the Elder Flame" );
+  trinkets->add_action(
+      "use_item,name=dragonfire_bomb_dispenser,if=!trinket.1.has_use_buff&!trinket.2.has_use_buff|(trinket.1.has_use_"
+      "buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger.remains>10|fight_remains<10",
+      "Dragonfire Bomb Dispenser" );
+  trinkets->add_action( "", "The War Within Trinkets" );
+  trinkets->add_action(
+      "use_item,name=imperfect_ascendancy_serum,use_off_gcd=1,if=pet.xuen_the_white_tiger.active",
+      "Imperfect Ascendancy Serum" );  // this seems incorrect, what if xuen isn't available due to talents?
+  trinkets->add_action(
+      "use_item,name=mad_queens_mandate,target_if=min:time_to_die,if=!trinket.1.has_use_buff&!trinket.2.has_use_buff|("
+      "trinket.1.has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger.remains>30",
+      "Mad Queen's Mandate" );  // this seems incorrect, don't you want to target min raw hp?
+  trinkets->add_action(
+      "use_item,name=treacherous_transmitter,if=!fight_style.dungeonslice&(cooldown.invoke_xuen_the_white_tiger."
+      "remains<4|talent.xuens_bond&pet.xuen_the_white_tiger.active)|fight_style.dungeonslice&((fight_style."
+      "DungeonSlice&active_enemies=1&(time<10|talent.xuens_bond&talent.celestial_conduit)|!fight_style.dungeonslice|"
+      "active_enemies>1)&cooldown.storm_earth_and_fire.ready&(target.time_to_die>14&!fight_style.dungeonroute|target."
+      "time_to_die>22)&(active_enemies>2|debuff.acclamation.up|!talent.ordered_elements&time<5)&(chi>2&talent.ordered_"
+      "elements|chi>5|chi>3&energy<50|energy<50&active_enemies=1|prev.tiger_palm&!talent.ordered_elements&time<5)|"
+      "fight_remains<30)|buff.invokers_delight.up",
+      "Treacherous Transmitter" );
+  trinkets->add_action(
+      "use_item,slot=trinket1,if=trinket.has_use_buff&pet.xuen_the_white_tiger.active",
+      "Default Stat Buff Trinkets" );  // this seems incorrect, what if xuen isn't available due to talents?
+  trinkets->add_action(
+      "use_item,slot=trinket2,if=trinket.has_use_buff&pet.xuen_the_white_tiger.active" );  // this seems incorrect, what
+                                                                                           // if xuen isn't available
+                                                                                           // due to talents?
+  trinkets->add_action(
+      "use_item,slot=trinket1,if=trinket.has_use_damage&(!trinket.1.has_use_buff&!trinket.2.has_use_buff|(trinket.1."
+      "has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger.remains>30)",
+      "Default Damage Trinkets" );
+  trinkets->add_action(
+      "use_item,slot=trinket2,if=trinket.has_use_damage&(!trinket.1.has_use_buff&!trinket.2.has_use_buff|(trinket.1."
+      "has_use_buff|trinket.2.has_use_buff)&cooldown.invoke_xuen_the_white_tiger.remains>30)" );
+  trinkets->add_action( "", "Additional Trinket Actions" );
   trinkets->add_action( "do_treacherous_transmitter_task,if=pet.xuen_the_white_tiger.active|fight_remains<20" );
+  trinkets->add_action( "", "Fallback Equipped On Use Effects" );
+  for ( const item_t &item : p->items )
+    if ( item.has_special_effect( SPECIAL_EFFECT_SOURCE_ITEM, SPECIAL_EFFECT_USE ) )
+      trinkets->add_action( "use_item,name=" + item.name_str );
 
   // Cooldowns
   cooldowns->add_action(
@@ -519,7 +472,7 @@ void windwalker_live( player_t *p )
       "storm_earth_and_fire,target_if=max:target.time_to_die,if=variable.sef_condition&!fight_style.dungeonroute|"
       "variable.sef_dungeonroute_condition&fight_style.dungeonroute" );
   cooldowns->add_action( "touch_of_karma" );
-  //CD relevant racials
+  // CD relevant racials
   cooldowns->add_action( "ancestral_call,if=buff.invokers_delight.remains>15|fight_remains<20" );
   cooldowns->add_action( "blood_fury,if=buff.invokers_delight.remains>15|fight_remains<20" );
   cooldowns->add_action( "fireblood,if=buff.invokers_delight.remains>15|fight_remains<10" );
