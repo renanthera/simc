@@ -195,29 +195,34 @@ inline std::vector<double> normalize_histogram( const std::vector<size_t>& in )
  * Tests for normality
  */
 template <typename Range>
-significance_e anderson_darling( const Range& r, range::value_type_t<Range> mean, range::value_type_t<Range> stddev )
+std::pair<significance_e, range::value_type_t<Range>> anderson_darling( const Range& r, range::value_type_t<Range> mean, range::value_type_t<Range> stddev )
 {
   range::value_type_t<Range> sum{};
   range::value_type_t<Range> y_cdf{};
   range::value_type_t<Range> statistic{};
+  range::value_type_t<Range> sample_size_scalar{};
 
   constexpr std::array<std::pair<significance_e, range::value_type_t<Range>>, significance_e::SIGNIFICANCE_MAX>
-      statistic_critical_values = { { { significance_e::SIGNIFICANCE_1, 1.092 },
-                                      { significance_e::SIGNIFICANCE_2_5, 0.918 },
-                                      { significance_e::SIGNIFICANCE_5, 0.787 },
+      statistic_critical_values = { { { significance_e::SIGNIFICANCE_15, 0.576 },
                                       { significance_e::SIGNIFICANCE_10, 0.656 },
-                                      { significance_e::SIGNIFICANCE_15, 0.576 } } };
+                                      { significance_e::SIGNIFICANCE_5, 0.787 },
+                                      { significance_e::SIGNIFICANCE_2_5, 0.918 },
+                                      { significance_e::SIGNIFICANCE_1, 1.092 } } };
 
-  size_t n = std::size( r );
+  double n = std::size( r );
+
+  if ( n < 20 )
+    return { significance_e::SIGNIFICANCE_MAX, -1 };
 
   for ( size_t i = 0; i < n; ++i )
   {
     y_cdf = rng::stdnormal_cdf( ( r[ i ] - mean ) / stddev );
-    sum += ( 2 * i - 1 ) * std::log( y_cdf );
-    sum += ( 2 * ( n - i ) + 1 ) * std::log( 1 - y_cdf );
+    sum += ( 2.0 * i - 1.0 ) * std::log( y_cdf );
+    sum += ( 2.0 * ( n - i ) + 1.0 ) * std::log( 1.0 - y_cdf );
   }
 
-  statistic = ( -n - sum / n ) * ( 1 + 4 / ( 3 * n ) + 9 / ( 4 * n * n ) );
+  sample_size_scalar = ( 1.0 + 4.0 / ( 3.0 * n ) + 9.0 / ( 4.0 * n * n ) );
+  statistic          = ( -n - sum / n ) * sample_size_scalar;
 
   auto cmp = []( const std::pair<significance_e, range::value_type_t<Range>>& pair, range::value_type_t<Range> value ) {
     return pair.second < value;
@@ -226,9 +231,9 @@ significance_e anderson_darling( const Range& r, range::value_type_t<Range> mean
   auto lb = std::lower_bound( statistic_critical_values.begin(), statistic_critical_values.end(), statistic, cmp );
 
   if ( lb == statistic_critical_values.end() )
-    return significance_e::SIGNIFICANCE_MAX;
+    return { significance_e::SIGNIFICANCE_MAX, statistic };
 
-  return lb->first;
+  return { lb->first, statistic };
 }
 }  // namespace statistics
 
@@ -571,6 +576,14 @@ public:
 
     // Should be improved to use linear interpolation
     return ( sorted_data()[ (int)( x * ( sorted_data().size() - 1 ) ) ] );
+  }
+
+  std::pair<significance_e, double> is_normal() const
+  {
+    if ( simple || data().empty() )
+      return { significance_e::SIGNIFICANCE_MAX, -2 };
+
+    return statistics::anderson_darling( sorted_data(), _mean, std_dev);
   }
 
   const std::vector<value_t>& data() const

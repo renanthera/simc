@@ -642,6 +642,14 @@ void report_helper::print_html_sample_data( report::sc_html_stream& os, const pl
         "<td class=\"right\">%.2f</td>\n</tr>\n",
         data.percentile( 0.95 ) - data.percentile( 0.05 ) );
 
+    auto normality = data.is_normal();
+    os.printf(
+              "<tr>\n<td class=\"left\">Anderson-Darling Normality Significance</td>\n"
+              "<td class=\"right\">%s (%.2f)</td>\n</tr>\n",
+              util::significance_string( normality.first ),
+              normality.second
+              );
+
     os << "<tr>\n"
        << "<th class=\"left\" colspan=\"2\">Mean Distribution</th>\n"
        << "</tr>\n";
