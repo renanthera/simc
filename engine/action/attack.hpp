@@ -8,6 +8,8 @@
 #include "config.hpp"
 
 #include "action.hpp"
+#include "player/player.hpp"
+#include "item/item.hpp"
 
 // WDPS -> Attack Power Coefficient used for Forever/Classic Attack Power calculations
 constexpr double WEAPON_POWER_COEFFICIENT = 14;
@@ -98,4 +100,38 @@ struct ranged_attack_t : public attack_t
   void schedule_execute( action_state_t* execute_state = nullptr ) override;
 
   proc_types proc_type() const override;
+};
+
+struct auto_attack_t : public action_t
+{
+  std::map<slot_e, action_t*> attacks;
+
+  // static bool is_ranged(weapon_t& w)
+  // {
+  //   switch ( w->)
+  // };
+
+  // virtual action_t* create_melee_attack(weapon_t& w, player_t* p)
+  // {
+  //   return new melee_attack_t()
+  // };
+
+  auto_attack_t( std::string_view options_str, player_t* p )
+    : action_t( ACTION_OTHER, "auto_attack", p )
+  {
+    parse_options( options_str );
+
+    for (const item_t& item : p->items )
+    {
+      switch ( item.slot )
+        {
+        case SLOT_MAIN_HAND:
+        case SLOT_OFF_HAND:
+        case SLOT_RANGED:
+          // foo
+        default:
+          continue;
+        }
+    }
+  }
 };
