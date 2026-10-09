@@ -263,6 +263,7 @@ struct player_t : public actor_t
   // weapon_t off_hand_weapon;
 
   // Main, offhand, and ranged attacks
+  std::map<slot_e, action_t*> melee_attacks;
   attack_t* main_hand_attack;
   attack_t*  off_hand_attack;
 
