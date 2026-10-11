@@ -115,6 +115,7 @@ item_t::item_t( player_t* p, util::string_view o ) :
   unique( false ),
   unique_addon( false ),
   is_ptr( p -> dbc->ptr ),
+  weapon( nullptr ),
   parsed(),
   options_str( o ), option_initial_cd( 0 )
 {
@@ -1882,7 +1883,7 @@ void item_t::decode_addon()
 
 void item_t::decode_weapon()
 {
-  if ( !weapon )
+  if ( slot < SLOT_MAIN_HAND || slot > SLOT_RANGED )
     return;
 
   // Custom weapon stats cant be unloaded to the "proxy" item data at all,
@@ -1897,6 +1898,7 @@ void item_t::decode_weapon()
     if ( wc == WEAPON_NONE )
       return;
 
+    weapon = &( player->equipped_weapons[ slot ] );
     weapon -> type = wc;
     weapon -> swing_time = timespan_t::from_millis( parsed.data.delay );
     weapon -> dps = player->dbc->weapon_dps( parsed.data, item_level() );
@@ -1907,6 +1909,7 @@ void item_t::decode_weapon()
   else
   {
     auto tokens = item_database::parse_tokens( option_weapon_str );
+    weapon = &( player->equipped_weapons[ slot ] );
 
     bool dps_set = false;
     bool dmg_set = false;
