@@ -6,7 +6,7 @@ convert_line_ending()
   rm $1.unix
 }
 
-CLASSES=(warrior hunter monk paladin rogue shaman mage warlock druid deathknight priest demonhunter evoker)
+CLASSES=(warrior hunter paladin rogue shaman mage warlock druid priest)
 
 # get directory of this script
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
