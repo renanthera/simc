@@ -32,7 +32,7 @@ jobs:
         run: ${{ github.workspace }}/generate_apl_modules_ci.sh
 
       - name: Download APL Dumps
-        # TOOD: Might be able to get this running if/when spec-test is working again
+        # TODO: Might be able to get this running if/when spec-test is working again
         if: false
         uses: actions/download-artifact@v8
         with:
@@ -41,7 +41,7 @@ jobs:
           merge-multiple: true
 
       - name: Download Profiles
-        # TOOD: Might be able to get this running if/when spec-test is working again
+        # TODO: Might be able to get this running if/when spec-test is working again
         if: false
         uses: actions/download-artifact@v8
         with:
