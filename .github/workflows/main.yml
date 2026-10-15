@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [midnight]
+    branches: [main]
   push:
-    branches: [midnight]
+    branches: [main]
     paths-ignore:
       - "ActionPriorityLists/**"
       - "SpellDataDump/*.txt"
@@ -45,26 +45,16 @@ jobs:
           set -euo pipefail
 
           ALL_SPECS=(
-            deathknight_blood
-            deathknight_unholy
-            deathknight_frost
-            demonhunter_devourer
-            demonhunter_havoc
-            demonhunter_vengeance
             druid_balance
             druid_feral
             druid_guardian
             druid_restoration
-            evoker_devastation
-            evoker_augmentation
             hunter_beast_mastery
             hunter_marksmanship
             hunter_survival
             mage_arcane
             mage_fire
             mage_frost
-            monk_brewmaster
-            monk_windwalker
             paladin_protection
             paladin_retribution
             priest_shadow
@@ -110,26 +100,14 @@ jobs:
             local file="$1"
 
             case "$file" in
-              engine/class_modules/sc_death_knight.cpp|engine/class_modules/apl/apl_death_knight.*|profiles/generators/*/*_Generate_Deathknight.simc)
-                mark_class_changed deathknight
-                ;;
-              engine/class_modules/sc_demon_hunter.cpp|engine/class_modules/apl/apl_demon_hunter.*|engine/class_modules/apl/demon_hunter/*|profiles/generators/*/*_Generate_Demonhunter.simc)
-                mark_class_changed demonhunter
-                ;;
               engine/class_modules/sc_druid.cpp|engine/class_modules/apl/druid/*|profiles/generators/*/*_Generate_Druid.simc)
                 mark_class_changed druid
-                ;;
-              engine/class_modules/sc_evoker.cpp|engine/class_modules/apl/apl_evoker.*|profiles/generators/*/*_Generate_Evoker.simc)
-                mark_class_changed evoker
                 ;;
               engine/class_modules/sc_hunter.cpp|engine/class_modules/apl/hunter/*|engine/class_modules/apl/apl_hunter.*|profiles/generators/*/*_Generate_Hunter.simc)
                 mark_class_changed hunter
                 ;;
               engine/class_modules/sc_mage.cpp|engine/class_modules/apl/mage.*|profiles/generators/*/*_Generate_Mage.simc)
                 mark_class_changed mage
-                ;;
-              engine/class_modules/monk/*|engine/class_modules/apl/apl_monk.*|profiles/generators/*/*_Generate_Monk.simc)
-                mark_class_changed monk
                 ;;
               engine/class_modules/paladin/*|engine/class_modules/apl/apl_paladin.*|profiles/generators/*/*_Generate_Paladin.simc)
                 mark_class_changed paladin
