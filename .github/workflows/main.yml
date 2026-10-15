@@ -44,31 +44,18 @@ jobs:
         run: |
           set -euo pipefail
 
+          # TODO: Figure out if we can remove the _unknown later on when we have better
+          # handling of specs in Forever.
           ALL_SPECS=(
-            druid_balance
-            druid_feral
-            druid_guardian
-            druid_restoration
-            hunter_beast_mastery
-            hunter_marksmanship
-            hunter_survival
-            mage_arcane
-            mage_fire
-            mage_frost
-            paladin_protection
-            paladin_retribution
-            priest_shadow
-            rogue_assassination
-            rogue_outlaw
-            rogue_subtlety
-            shaman_elemental
-            shaman_enhancement
-            warlock_affliction
-            warlock_demonology
-            warlock_destruction
-            warrior_arms
-            warrior_fury
-            warrior_protection
+            druid_unknown
+            hunter_unknown
+            mage_unknown
+            paladin_unknown
+            priest_unknown
+            rogue_unknown
+            shaman_unknown
+            warlock_unknown
+            warrior_unknown
           )
 
           if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
@@ -201,5 +188,5 @@ jobs:
   # this job will do bad things if enabled for non-default branch without additional work
   update-generated-files:
     needs: [build, spec-test] # requires spec-test as this job downloads files generated from spec-test
-    if: github.event_name == 'push' && ( success() || failure() ) && github.repository == 'simulationcraft/simc' && github.ref_name == github.event.repository.default_branch
+    if: github.event_name == 'push' && ( success() || failure() ) && github.repository == 'simulationcraft/simc-forever' && github.ref_name == github.event.repository.default_branch
     uses: ./.github/workflows/generate_files.yml
