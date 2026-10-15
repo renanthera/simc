@@ -292,7 +292,7 @@ jobs:
             save_actions=ActionPriorityLists/default/${{ matrix.spec }}.simc
 
       - name: Upload APL
-        if: steps.check_apl_changes.outputs.changed == 'true'
+        if: steps.dump_apl_default.outcome == 'success'
         continue-on-error: true
         uses: actions/upload-artifact@v6
         with:

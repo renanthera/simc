@@ -24,12 +24,16 @@ jobs:
         run: echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
 
       - name: Generate APL Modules
-        if: steps.cache.outputs.cache-hit == 'true'
+        # Currently disabled in Forever. Should be doable but needs some more work
+        if: false
+        #if: steps.cache.outputs.cache-hit == 'true'
         env:
           SIMC_CLI_PATH: ${{ runner.workspace }}/b/ninja/simc
         run: ${{ github.workspace }}/generate_apl_modules_ci.sh
 
       - name: Download APL Dumps
+        # TOOD: Might be able to get this running if/when spec-test is working again
+        if: false
         uses: actions/download-artifact@v8
         with:
           path: ActionPriorityLists
@@ -37,6 +41,8 @@ jobs:
           merge-multiple: true
 
       - name: Download Profiles
+        # TOOD: Might be able to get this running if/when spec-test is working again
+        if: false
         uses: actions/download-artifact@v8
         with:
           path: profiles
