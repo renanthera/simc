@@ -1750,7 +1750,8 @@ void unique_gear::DISABLED_EFFECT( special_effect_t& effect )
 void unique_gear::register_special_effects()
 {
   /* Racial special effects */
-  register_special_effect( 5227,   racial::touch_of_the_grave );
+  // TODO: Undead racial in Forever
+  //register_special_effect( 5227,   racial::touch_of_the_grave );
   register_special_effect( 255669, racial::entropic_embrace );
   register_special_effect( 291628, racial::brush_it_off );
   register_special_effect( 292751, racial::zandalari_loa, true );
