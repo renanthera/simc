@@ -11,6 +11,10 @@ SimulationCraft allows raid/party creation of arbitrary size, generating detaile
 
 A simple graphical interface is included with the tool, allowing players to download and analyze characters from the Armory. It can also be run from the command-line in which case the player profiles are specified via parameter files. 
 
+**This repo is Simulation Forever which is targetted at WoW Forever**
+
+For Modern/Retail WoW, check out the main [SimulationCraft repository](https://github.com/simulationcraft/simc).
+
 ## How Can I Use It?
 
 Go to the [downloads page](https://www.simulationcraft.org/download.html) and get the package for your particular platform.
