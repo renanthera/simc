@@ -87,7 +87,7 @@ struct item_t
   player_t* player;
   slot_e slot, parent_slot;
   bool unique, unique_addon, is_ptr;
-  weapon_t* weapon;
+  weapon_t* weapon = nullptr;
 
   // Structure contains the "parsed form" of this specific item, be the data
   // from user options, or a data source such as the Blizzard API, or Wowhead
