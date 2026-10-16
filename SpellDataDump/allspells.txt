@@ -45725,6 +45725,7 @@ Effects          :
 Description      : Gives you a $h% chance to enter a Clearcasting state after casting any Fire, Frost, or Nature damage spell.  The Clearcasting state reduces the mana cost of your next damage spell by $16246s1%.
 
 Name             : Elemental Mastery (id=16166) [Spell Family (11)] 
+Hotfixed         : Attributes
 Talent Entry     : Generic [tree=class, row=7, col=2, max_rank=1, req_points=30]
 Class            : Shaman
 School           : Nature
@@ -45735,7 +45736,7 @@ Cooldown         : 180 seconds
 Stacks           : 1 initial, 1 maximum
 Proc Chance      : 100%
 Proc Flags       : Yellow Melee, White Ranged, Yellow Ranged, Generic Helpful, Generic Hostile Spell, Magic Heal, Magic Hostile Spell
-Attributes       : Do Not Sheath (18), Cooldown On Event (25), Unknown (493)
+Attributes       : Do Not Sheath (18), Unknown (493)
 Effects          :
 #1 (id=694178)   : Apply Aura (6) | Add Flat Modifier (107): Spell Cast Time (10)
                    Base Value: -500 | Scaled Value: -500 | Misc Value: 10 | Target: Self (1)
@@ -125929,8 +125930,6 @@ Spell Type       : None
 Spell Level      : 1
 Labels           : 23: Hunter Spells
                  : 3096
-Proc Chance      : 100%
-Proc Flags       : White Melee, Yellow Melee, White Ranged, Yellow Ranged, Magic Hostile Spell, Periodic
 Attributes       : Is Ability (4), Passive (6), Do Not Display (Spellbook, Aura Icon, Combat Log) (7), Do Not Log (8), Include In Advanced Combat Log (72), Aura Points On Client (268), Spellcast Override In Spellbook (310), Unknown (493)
 Effects          :
 #1 (id=1340058)  : Apply Aura (6) | Add Percent Modifier (108): Spell Cooldown (11)
