@@ -4276,6 +4276,7 @@ Effects          :
 Description      : Increases the damage dealt by your poisons by $m1% and gives your poisons an additional $m3% chance to resist dispel effects.
 
 Name             : Silenced - Kick (id=18425) [Spell Family (8)] 
+Hotfixed         : Attributes, Stance Mask (134217728 -> 0), Description
 Class            : Rogue
 School           : Physical
 Spell Type       : None
@@ -4284,13 +4285,13 @@ Range            : 50000 yards
 Duration         : 2 seconds
 Labels           : 20: Rogue Spells
 Proc Chance      : 101%
-Stance Mask      : 0x08000000
 Mechanic         : Silence
 Triggered By     : Improved Kick (13754)
-Attributes       : Show Mechanic as Combat Text (213), Nameplate Personal Buffs/Debuffs (423), Unknown (493)
+Attributes       : Do Not Display Range (126), Show Mechanic as Combat Text (213), Nameplate Personal Buffs/Debuffs (423), Unknown (493)
 Effects          :
 #1 (id=695774)   : Apply Aura (6) | Silence (27)
                    Base Value: 1 | Scaled Value: 1 | Misc Value: 126 | Target: Targeted Enemy (6)
+Description      : Gives your kick ability a $13754s1% chance to silence the target.
 Tooltip          : Silenced.
 
 Name             : Aggression (id=18427) [Spell Family (8), Passive, Hidden] 
