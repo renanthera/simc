@@ -42539,7 +42539,8 @@ Family Flags     : 20
 Attributes       : Not Shapeshifted (16), Periodic Can Crit (265), Nameplate Personal Buffs/Debuffs (423), Unknown (493)
 Effects          :
 #1 (id=687113)   : School Damage (2): holy
-                   Base Value: 58 | Scaled Value: 63.2 (delta=0.227273) | Points Per Level: 1.3 | SP Coefficient: 0.75 | Target: Targeted Enemy (6)
+                   Base Value: 54 | Scaled Value: 59.2 (delta=0.227273) | Points Per Level: 1.3 | SP Coefficient: 0.75 | Target: Targeted Enemy (6)
+Hotfixed         : Base Value (58 -> 54)
 #2 (id=687114)   : Apply Aura (6) | Periodic Damage (3): holy every 2 seconds
                    Base Value: 4 | Scaled Value: 4 | SP Coefficient: 0.05 | Target: Targeted Enemy (6)
 Description      : Consumes the enemy in holy flames that cause $s1 Holy damage and an additional $o2 Holy damage over $d.
@@ -45725,6 +45726,7 @@ Effects          :
 Description      : Gives you a $h% chance to enter a Clearcasting state after casting any Fire, Frost, or Nature damage spell.  The Clearcasting state reduces the mana cost of your next damage spell by $16246s1%.
 
 Name             : Elemental Mastery (id=16166) [Spell Family (11)] 
+Hotfixed         : Attributes
 Talent Entry     : Generic [tree=class, row=7, col=2, max_rank=1, req_points=30]
 Class            : Shaman
 School           : Nature
@@ -45735,7 +45737,7 @@ Cooldown         : 180 seconds
 Stacks           : 1 initial, 1 maximum
 Proc Chance      : 100%
 Proc Flags       : Yellow Melee, White Ranged, Yellow Ranged, Generic Helpful, Generic Hostile Spell, Magic Heal, Magic Hostile Spell
-Attributes       : Do Not Sheath (18), Cooldown On Event (25), Unknown (493)
+Attributes       : Do Not Sheath (18), Unknown (493)
 Effects          :
 #1 (id=694178)   : Apply Aura (6) | Add Flat Modifier (107): Spell Cast Time (10)
                    Base Value: -500 | Scaled Value: -500 | Misc Value: 10 | Target: Self (1)
@@ -45978,6 +45980,7 @@ Effects          :
 Description      : Summons a Mana Tide Totem with $s1 health at the feet of the caster for ${$d-1} sec that restores $16191s1 mana every $16191t1 seconds to group members within $16191a1 yards.
 
 Name             : Mana Tide (desc=Rank 1) (id=16191) [Spell Family (11), Passive] 
+Hotfixed         : Description
 Class            : Shaman
 School           : Nature
 Spell Type       : Magic
@@ -45989,6 +45992,7 @@ Attributes       : Passive (6), Unknown (493)
 Effects          :
 #1 (id=693253)   : Apply Party Aura (35) | Periodic Energize Power (24): every 3 seconds
                    Base Value: 88 | Scaled Value: 88 | Radius: 30 yards | Target: Self (1)
+Description      : $@spelldesc16190
 Tooltip          : Gain $s1 mana every $t1 seconds.
 
 Name             : Tidal Mastery (id=16194) [Spell Family (11), Passive, Hidden] 
@@ -54101,6 +54105,7 @@ Effects          :
                    Base Value: 1 | Scaled Value: 1 | Target: Self (1)
 
 Name             : Silenced - Kick (id=18425) [Spell Family (8)] 
+Hotfixed         : Attributes, Stance Mask (134217728 -> 0), Description
 Class            : Rogue
 School           : Physical
 Spell Type       : None
@@ -54109,13 +54114,13 @@ Range            : 50000 yards
 Duration         : 2 seconds
 Labels           : 20: Rogue Spells
 Proc Chance      : 101%
-Stance Mask      : 0x08000000
 Mechanic         : Silence
 Triggered By     : Improved Kick (13754)
-Attributes       : Show Mechanic as Combat Text (213), Nameplate Personal Buffs/Debuffs (423), Unknown (493)
+Attributes       : Do Not Display Range (126), Show Mechanic as Combat Text (213), Nameplate Personal Buffs/Debuffs (423), Unknown (493)
 Effects          :
 #1 (id=695774)   : Apply Aura (6) | Silence (27)
                    Base Value: 1 | Scaled Value: 1 | Misc Value: 126 | Target: Targeted Enemy (6)
+Description      : Gives your kick ability a $13754s1% chance to silence the target.
 Tooltip          : Silenced.
 
 Name             : Aggression (id=18427) [Spell Family (8), Passive, Hidden] 
@@ -118282,13 +118287,14 @@ Effects          :
 Description      : Craft an Anarchist's Workbench.
 
 Name             : Faster Attack I (id=1263099) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273665)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 17 | Scaled Value: 17 | Target: Active Pet (5)
@@ -118296,13 +118302,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack II (id=1263100) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273666)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 25 | Scaled Value: 25 | Target: Active Pet (5)
@@ -118310,13 +118317,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack III (id=1263102) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273669)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 33 | Scaled Value: 33 | Target: Active Pet (5)
@@ -118324,13 +118332,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack IV (id=1263104) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273671)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 43 | Scaled Value: 43 | Target: Active Pet (5)
@@ -118338,13 +118347,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack V (id=1263107) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273674)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 54 | Scaled Value: 54 | Target: Active Pet (5)
@@ -118352,13 +118362,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack VI (id=1263109) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273676)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 67 | Scaled Value: 67 | Target: Active Pet (5)
@@ -118366,13 +118377,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack VII (id=1263110) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273677)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 100 | Scaled Value: 100 | Target: Active Pet (5)
@@ -125929,8 +125941,6 @@ Spell Type       : None
 Spell Level      : 1
 Labels           : 23: Hunter Spells
                  : 3096
-Proc Chance      : 100%
-Proc Flags       : White Melee, Yellow Melee, White Ranged, Yellow Ranged, Magic Hostile Spell, Periodic
 Attributes       : Is Ability (4), Passive (6), Do Not Display (Spellbook, Aura Icon, Combat Log) (7), Do Not Log (8), Include In Advanced Combat Log (72), Aura Points On Client (268), Spellcast Override In Spellbook (310), Unknown (493)
 Effects          :
 #1 (id=1340058)  : Apply Aura (6) | Add Percent Modifier (108): Spell Cooldown (11)
@@ -129860,8 +129870,9 @@ Duration         : 10 seconds
 Labels           : 18: Priest Spells
 Attributes       : Do Not Log (8), Include In Advanced Combat Log (72), Not an Action (92), Aura Points On Client (268), Unknown (493)
 Effects          :
-#1 (id=1363937)  : Apply Aura (6) | Modify Base Attribute% (80)
+#1 (id=1363937)  : Apply Aura (6) | Modify Total Stat% (137)
                    Base Value: 15 | Scaled Value: 15 | Stat: Spi | Radius: 100 yards | Target: Party in Area (20) -> Self (1)
+Hotfixed         : Sub Type (80 -> 137), Misc Value (4 -> 0), Misc Value 2 (0 -> 16)
 Description      : Your Mind Blast and fully channeled Mind Flay causes Dark Inspiration, increasing yours and your party's Spirit by $1326159s1% for $d.
 
 Tooltip          : Spirit increased by $w1%.

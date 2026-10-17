@@ -9412,13 +9412,14 @@ Effects          :
 Tooltip          : Regenerating $s1% of your normal Mana regeneration while casting spells.
 
 Name             : Faster Attack I (id=1263099) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273665)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 17 | Scaled Value: 17 | Target: Active Pet (5)
@@ -9426,13 +9427,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack II (id=1263100) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273666)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 25 | Scaled Value: 25 | Target: Active Pet (5)
@@ -9440,13 +9442,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack III (id=1263102) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273669)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 33 | Scaled Value: 33 | Target: Active Pet (5)
@@ -9454,13 +9457,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack IV (id=1263104) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273671)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 43 | Scaled Value: 43 | Target: Active Pet (5)
@@ -9468,13 +9472,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack V (id=1263107) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273674)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 54 | Scaled Value: 54 | Target: Active Pet (5)
@@ -9482,13 +9487,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack VI (id=1263109) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273676)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 67 | Scaled Value: 67 | Target: Active Pet (5)
@@ -9496,13 +9502,14 @@ Description      : Increases attack speed by $s1%.
 Tooltip          : Attack speed increased by $s1%.
 
 Name             : Faster Attack VII (id=1263110) [Passive] 
+Hotfixed         : Attributes
 Class            : Hunter
 School           : Physical
 Spell Type       : None
 Spell Level      : 1
 Range            : 100 yards
 Cast Time        : 2 seconds
-Attributes       : Passive (6), Do Not Log (8), Unknown (493)
+Attributes       : Passive (6), Do Not Log (8), Do Not Display Range (126), Unknown (493)
 Effects          :
 #1 (id=1273677)  : Apply Aura (6) | Auto Attack Speed (Normalized wDPS) (9)
                    Base Value: 100 | Scaled Value: 100 | Target: Active Pet (5)
@@ -10971,8 +10978,6 @@ Spell Type       : None
 Spell Level      : 1
 Labels           : 23: Hunter Spells
                  : 3096
-Proc Chance      : 100%
-Proc Flags       : White Melee, Yellow Melee, White Ranged, Yellow Ranged, Magic Hostile Spell, Periodic
 Attributes       : Is Ability (4), Passive (6), Do Not Display (Spellbook, Aura Icon, Combat Log) (7), Do Not Log (8), Include In Advanced Combat Log (72), Aura Points On Client (268), Spellcast Override In Spellbook (310), Unknown (493)
 Effects          :
 #1 (id=1340058)  : Apply Aura (6) | Add Percent Modifier (108): Spell Cooldown (11)

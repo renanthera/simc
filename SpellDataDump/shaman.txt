@@ -4082,6 +4082,7 @@ Effects          :
 Description      : Gives you a $h% chance to enter a Clearcasting state after casting any Fire, Frost, or Nature damage spell.  The Clearcasting state reduces the mana cost of your next damage spell by $16246s1%.
 
 Name             : Elemental Mastery (id=16166) [Spell Family (11)] 
+Hotfixed         : Attributes
 Talent Entry     : Generic [tree=class, row=7, col=2, max_rank=1, req_points=30]
 Class            : Shaman
 School           : Nature
@@ -4092,7 +4093,7 @@ Cooldown         : 180 seconds
 Stacks           : 1 initial, 1 maximum
 Proc Chance      : 100%
 Proc Flags       : Yellow Melee, White Ranged, Yellow Ranged, Generic Helpful, Generic Hostile Spell, Magic Heal, Magic Hostile Spell
-Attributes       : Do Not Sheath (18), Cooldown On Event (25), Unknown (493)
+Attributes       : Do Not Sheath (18), Unknown (493)
 Effects          :
 #1 (id=694178)   : Apply Aura (6) | Add Flat Modifier (107): Spell Cast Time (10)
                    Base Value: -500 | Scaled Value: -500 | Misc Value: 10 | Target: Self (1)
@@ -4335,6 +4336,7 @@ Effects          :
 Description      : Summons a Mana Tide Totem with $s1 health at the feet of the caster for ${$d-1} sec that restores $16191s1 mana every $16191t1 seconds to group members within $16191a1 yards.
 
 Name             : Mana Tide (desc=Rank 1) (id=16191) [Spell Family (11), Passive] 
+Hotfixed         : Description
 Class            : Shaman
 School           : Nature
 Spell Type       : Magic
@@ -4346,6 +4348,7 @@ Attributes       : Passive (6), Unknown (493)
 Effects          :
 #1 (id=693253)   : Apply Party Aura (35) | Periodic Energize Power (24): every 3 seconds
                    Base Value: 88 | Scaled Value: 88 | Radius: 30 yards | Target: Self (1)
+Description      : $@spelldesc16190
 Tooltip          : Gain $s1 mana every $t1 seconds.
 
 Name             : Tidal Mastery (id=16194) [Spell Family (11), Passive, Hidden] 
