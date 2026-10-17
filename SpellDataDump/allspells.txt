@@ -42539,7 +42539,8 @@ Family Flags     : 20
 Attributes       : Not Shapeshifted (16), Periodic Can Crit (265), Nameplate Personal Buffs/Debuffs (423), Unknown (493)
 Effects          :
 #1 (id=687113)   : School Damage (2): holy
-                   Base Value: 58 | Scaled Value: 63.2 (delta=0.227273) | Points Per Level: 1.3 | SP Coefficient: 0.75 | Target: Targeted Enemy (6)
+                   Base Value: 54 | Scaled Value: 59.2 (delta=0.227273) | Points Per Level: 1.3 | SP Coefficient: 0.75 | Target: Targeted Enemy (6)
+Hotfixed         : Base Value (58 -> 54)
 #2 (id=687114)   : Apply Aura (6) | Periodic Damage (3): holy every 2 seconds
                    Base Value: 4 | Scaled Value: 4 | SP Coefficient: 0.05 | Target: Targeted Enemy (6)
 Description      : Consumes the enemy in holy flames that cause $s1 Holy damage and an additional $o2 Holy damage over $d.
