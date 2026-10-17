@@ -2527,7 +2527,7 @@ static constexpr std::array<spelltext_data_t, 7139> __spelltext_data { {
   {   16188, "When activated, your next Nature spell with a casting time less than 10 sec. becomes an instant cast spell.", "Your next Nature spell with a casting time less than 10 secs will be an instant cast spell.", 0 },
   {   16189, "The radius of your totems that affect friendly targets is increased to 30 yd.", 0, 0 },
   {   16190, "Summons a Mana Tide Totem with $s1 health at the feet of the caster for ${$d-1} sec that restores $16191s1 mana every $16191t1 seconds to group members within $16191a1 yards.", 0, "Rank 1" },
-  {   16191, 0, "Gain $s1 mana every $t1 seconds.", "Rank 1" },
+  {   16191, "$@spelldesc16190", "Gain $s1 mana every $t1 seconds.", "Rank 1" },
   {   16194, "Increases the critical effect chance of your healing spells by $m1%.", 0, 0 },
   {   16196, "Improves your chance to hit by $m1%.", 0, "Rank 2" },
   {   16198, "Improves your chance to hit by $s1%.", 0, "Rank 3" },
@@ -3000,7 +3000,7 @@ static constexpr std::array<spelltext_data_t, 7139> __spelltext_data { {
   {   18386, "Heal your pet for $s1.", 0, 0 },
   {   18388, "Reduces the cooldown of your Fade ability by $/1000;s1 sec.", 0, 0 },
   {   18398, "Blasts a target for $s1 Frost damage.", 0, 0 },
-  {   18425, 0, "Silenced.", 0 },
+  {   18425, "Gives your kick ability a $13754s1% chance to silence the target.", "Silenced.", 0 },
   {   18427, "Increases the damage of your Sinister Strike, Backstab, and Eviscerate abilities by $s1%.", 0, 0 },
   {   18459, "Increases the critical strike chance of your Fire Blast, Ice Lance, Arcane Blast, and Scorch spells by $s1%.", 0, 0 },
   {   18462, "Allows $s1% of your Mana regeneration to continue while casting.", 0, 0 },
@@ -7142,7 +7142,7 @@ static constexpr std::array<spelltext_data_t, 7139> __spelltext_data { {
 } };
 
 // spelltext hotfix entries, wow build 1.60.1.70450
-static constexpr std::array<hotfix::client_hotfix_entry_t, 29> __spelltext_hotfix_data { {
+static constexpr std::array<hotfix::client_hotfix_entry_t, 31> __spelltext_hotfix_data { {
   {     702,  1, "Physical damage done reduced by $s1.", "Physical damage done reduced by $w1." },
   {     980,  1, "$o1 Shadow damage over $d.", "$?$w2>0[${$o1*($w2/100+1)}][$o1] Shadow damage over $d." },
   {    1014,  1, "$o1 Shadow damage over $d.", "$?$w2>0[${$o1*($w2/100+1)}][$o1] Shadow damage over $d." },
@@ -7160,10 +7160,12 @@ static constexpr std::array<hotfix::client_hotfix_entry_t, 29> __spelltext_hotfi
   {   12579,  1, "Taking $s1% increased damage from the caster's Cone of Cold spell.", "Taking $s1% increased damage and $s2% increased spell power coefficient from the caster's next Cone of Cold spell." },
   {   14913,  0, "Gives you a $s1% chance to avoid interruption caused by damage while casting any spell.", "Gives your spells a $s1% chance to not lose casting time when you take damage." },
   {   16181,  0, "Gives you a $m1% chance to avoid interruption caused by damage while casting any healing spell.", "Gives your healing spells a $m1% chance to not lose casting time when you take damage." },
+  {   16191,  0, nullptr, "$@spelldesc16190" },
   {   17063,  0, "Gives you a $m1% chance to avoid interruption caused by damage while casting Arcane and Nature spells.", "Gives your Arcane and Nature spells a $m1% chance to not lose casting time when you take damage." },
   {   17783,  0, "Gives you a $s1% chance to avoid interruption caused by damage while channeling or casting your Drain Life, Drain Mana, Drain Soul, or Wrack spells.", "Gives your Drain Life, Drain Mana, Drain Soul, and Wrack spells a $s1% chance to not lose casting time when you take damage." },
   {   18135,  0, "Gives you a $s1% chance to resist interruption caused by damage while casting or channeling any Destruction spell.", "Gives your Destruction spells a $s1% chance to not lose casting time when you take damage." },
   {   18223,  1, "Movement speed slowed by $s1%.", "Movement speed slowed by $w1%." },
+  {   18425,  0, nullptr, "Gives your kick ability a $13754s1% chance to silence the target." },
   {   29062,  0, "Reduces the pushback suffered from damaging attacks while casting Lightning Bolt, Chain Lightning, and Lava Burst by $m1%.", "Gives your Lightning Bolt, Chain Lightning, and Lava Burst spells a $m1% chance to not lose casting time when you take damage." },
   {  400588,  0, "Gives your Arcane Blast spell a $m1% chance, your Arcane Missile hits a ${$m1/4}% chance, and your Arcane Wrath, Fireball, Frostbolt, and Frostfire Bolt spells a ${$m1/2}% chance to reduce the channeled duration of your next Arcane Missiles spell by $400589s1%, reduce the Mana cost by $400589s3%, and missiles fire every ${$m2/10}.1 sec.", "Gives your Arcane Blast spell a $m1% chance, and your Arcane Wrath, Fireball, Frostbolt, Frost Blast, and Frostfire Bolt spells a ${$m1/2}% chance to reduce the channeled duration of your next Arcane Missiles spell by $400589s1%, reduce the Mana cost by $400589s3%, and missiles fire every ${$m2/10}.1 sec." },
   {  400589,  0, "Gives your Arcane Blast, Fireball, and Frostbolt spells a chance to reduce the channeled duration of the next Arcane Missiles spell by $400589s1%, reduce the mana cost by $s3%, and missiles fire every ${$400588m2/10}.1 sec.", "Reduces the channeled duration of your next Arcane Missiles spell by $s1%, reduces the mana cost by $s3%, and missiles fire every ${$400588w2/10}.1 sec." },
